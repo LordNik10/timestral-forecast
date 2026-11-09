@@ -1,36 +1,34 @@
 .PHONY: setup dev backend frontend test test-fast lint build samples
 
-# Installa le dipendenze di backend (uv, da lockfile) e frontend (npm).
+# Installa le dipendenze: Python con uv (da lockfile), JavaScript con npm workspaces (da lockfile alla radice).
 setup:
 	cd backend && uv sync
-	cd frontend && npm install
+	npm install
 
-# Avvia backend (localhost:8000) e frontend (localhost:3000) insieme; Ctrl+C li ferma entrambi.
+# Avvia backend (localhost:8000) e frontend (localhost:3000) insieme con Turborepo; Ctrl+C li ferma entrambi.
 dev:
-	cd frontend && npm run dev:all
+	npx turbo run dev
 
 backend:
-	cd backend && uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
+	npx turbo run dev --filter=backend
 
 frontend:
-	cd frontend && npm run dev
+	npx turbo run dev --filter=frontend
 
-# Tutti i test: backend (inclusi gli smoke test slow con Timestral-5M) e controlli del frontend.
+# Tutti i controlli, con cache di Turborepo: pytest (inclusi gli smoke test slow con Timestral-5M), ruff,
+# tsc, eslint e next build.
 test:
-	cd backend && uv run pytest
-	cd backend && uv run ruff check app tests
-	cd frontend && npm run typecheck && npm run lint && npm run build
+	npx turbo run test lint typecheck build
 
 # Solo i test veloci del backend (nessun modello caricato).
 test-fast:
-	cd backend && uv run pytest -m "not slow"
+	npx turbo run test:fast
 
 lint:
-	cd backend && uv run ruff check app tests
-	cd frontend && npm run typecheck && npm run lint
+	npx turbo run lint typecheck
 
 build:
-	cd frontend && npm run build
+	npx turbo run build
 
 # Rigenera i dataset sintetici di esempio (seed fisso).
 samples:

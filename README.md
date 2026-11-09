@@ -11,16 +11,21 @@ Carichi un file tabellare, scegli la colonna del tempo e il valore da prevedere,
 Non c'è nessun database: i file e i risultati vivono in memoria nel backend per un'ora, e nello stato della pagina.
 
 ```
-backend/    API FastAPI e logica di forecasting (Python, uv)
-frontend/   dashboard Next.js (TypeScript, Tailwind, Recharts)
-samples/    dataset di esempio e script che genera quelli sintetici
-Makefile    make setup · make dev · make test
+backend/       API FastAPI e logica di forecasting (Python, uv)
+frontend/      dashboard Next.js (TypeScript, Tailwind, Recharts)
+samples/       dataset di esempio e script che genera quelli sintetici
+turbo.json     task del monorepo (Turborepo)
+package.json   workspace npm alla radice
+Makefile       make setup · make dev · make test
 ```
+
+Il monorepo è gestito con **Turborepo** su npm workspaces. Il backend resta un progetto Python gestito da uv: il suo `backend/package.json` serve solo a esporre a Turborepo i task `dev`, `test`, `test:fast` e `lint`, che chiamano `uv run …`. Così `turbo run` orchestra entrambe le parti e mette in cache i risultati di test, lint, typecheck e build: se i file non cambiano, il task non viene rieseguito. I test del backend considerano anche `samples/` tra i propri input.
 
 ## Requisiti
 
 - Python ≥ 3.10 e [uv](https://docs.astral.sh/uv/) (`pip install uv`, oppure l'installer ufficiale)
 - Node.js ≥ 20 e npm
+- `uv` raggiungibile nel PATH, perché i task di Turborepo lo invocano direttamente. Se l'hai installato con `pip install --user uv`, su Windows aggiungi `%APPDATA%\Python\Python3XX\Scripts` al PATH.
 - `make`, facoltativo: su Windows si può installare (`winget install GnuWin32.Make`) oppure usare i comandi equivalenti indicati sotto
 - Un browser recente: Next.js 16 richiede almeno Chrome/Edge 111, Firefox 111 o Safari 16.4
 - GPU NVIDIA facoltativa: senza GPU si usa la CPU
@@ -35,7 +40,7 @@ che equivale a:
 
 ```bash
 cd backend && uv sync          # crea backend/.venv dal lockfile
-cd ../frontend && npm install
+cd .. && npm install           # workspace npm: frontend e Turborepo, lockfile alla radice
 ```
 
 Timestral si installa dal repository di Mistral ed è fissato nel lockfile di uv. Per aggiornarlo:
@@ -51,11 +56,11 @@ uv add "timestral @ git+https://github.com/mistralai/timestral.git"
 make dev
 ```
 
-Avvia insieme il backend su <http://localhost:8000> e il frontend su <http://localhost:3000> (equivale a `cd frontend && npm run dev:all`). In alternativa, in due terminali:
+Avvia insieme il backend su <http://localhost:8000> e il frontend su <http://localhost:3000>; equivale a `npx turbo run dev` (oppure `npm run dev`) dalla radice. Per avviarne uno solo:
 
 ```bash
-cd backend && uv run uvicorn app.main:app --port 8000
-cd frontend && npm run dev
+npx turbo run dev --filter=backend
+npx turbo run dev --filter=frontend
 ```
 
 Apri <http://localhost:3000>, trascina `samples/gol_stagionali.csv`, scegli `Stagione_Anno` come tempo e `Gol` come valore, poi avvia la previsione.
@@ -132,9 +137,11 @@ La documentazione interattiva è su <http://localhost:8000/docs>.
 ## Test
 
 ```bash
-make test        # pytest (inclusi gli smoke test slow con Timestral-5M), ruff, tsc, eslint, next build
-make test-fast   # solo i test veloci del backend, senza modelli
+make test        # = npx turbo run test lint typecheck build: pytest (con gli smoke test slow), ruff, tsc, eslint, next build
+make test-fast   # = npx turbo run test:fast: solo i test veloci del backend, senza modelli
 ```
+
+Turborepo mette in cache ogni task: un secondo `make test` senza modifiche termina in pochi millisecondi (`FULL TURBO`). Per forzare la riesecuzione usa `npx turbo run test --force`.
 
 Gli smoke test `slow` scaricano la 5M (~21 MB) se non è già in cache.
 

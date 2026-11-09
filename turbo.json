@@ -1,0 +1,35 @@
+{
+  "$schema": "https://turborepo.com/schema.json",
+  "ui": "stream",
+  "globalPassThroughEnv": [
+    "TIMESTRAL_DEVICE",
+    "TIMESTRAL_OFFLINE",
+    "HF_HOME",
+    "HF_HUB_OFFLINE",
+    "FRONTEND_ORIGIN",
+    "UV_*"
+  ],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "dependsOn": ["^build"],
+      "env": ["NEXT_PUBLIC_API_URL"],
+      "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "typecheck": {
+      "outputs": []
+    },
+    "lint": {
+      "outputs": []
+    },
+    "test": {
+      "outputs": []
+    },
+    "test:fast": {
+      "outputs": []
+    }
+  }
+}

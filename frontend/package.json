@@ -7,9 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "typecheck": "tsc --noEmit",
-    "dev:api": "cd ../backend && uv run uvicorn app.main:app --host 127.0.0.1 --port 8000",
-    "dev:all": "concurrently -k -n api,web -c blue,green \"npm:dev:api\" \"npm:dev\""
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
     "next": "16.4.5",
@@ -22,7 +20,6 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "concurrently": "^9.2.5",
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
     "tailwindcss": "^4",

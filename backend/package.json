@@ -1,0 +1,11 @@
+{
+  "name": "backend",
+  "private": true,
+  "description": "Wrapper per Turborepo: i comandi delegano a uv, che gestisce le dipendenze Python.",
+  "scripts": {
+    "dev": "uv run uvicorn app.main:app --host 127.0.0.1 --port 8000",
+    "test": "uv run pytest",
+    "test:fast": "uv run pytest -m \"not slow\"",
+    "lint": "uv run ruff check app tests"
+  }
+}

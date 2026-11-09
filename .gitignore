@@ -17,3 +17,6 @@ next-env.d.ts
 .env.local
 .DS_Store
 Thumbs.db
+
+# Turborepo
+.turbo/

@@ -1,0 +1,20 @@
+{
+  "name": "timestral-forecast",
+  "private": true,
+  "packageManager": "npm@11.19.0",
+  "workspaces": [
+    "backend",
+    "frontend"
+  ],
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test lint typecheck build",
+    "test:fast": "turbo run test:fast"
+  },
+  "devDependencies": {
+    "turbo": "2.11.10"
+  }
+}

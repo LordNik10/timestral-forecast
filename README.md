@@ -37,6 +37,7 @@ Tutti i comandi si lanciano dalla radice con `npm run <script>`. Il `Makefile` �
 
 - Python ≥ 3.10 e [uv](https://docs.astral.sh/uv/) (`pip install uv`, oppure l'installer ufficiale)
 - Node.js ≥ 20 e npm
+- git: Timestral si installa direttamente dal repository GitHub di Mistral
 - Gli script npm lanciano uv tramite `scripts/uv.mjs`, che usa `uv` se è nel PATH e altrimenti l'eseguibile installato con `pip install uv`. Il PATH non va quindi modificato; per usare `uv` a mano da terminale, su Windows aggiungi `%APPDATA%\Python\Python3XX\Scripts` al PATH.
 - `make`, facoltativo: basta npm; su Windows `make` si installa con `winget install GnuWin32.Make`
 - Un browser recente: Next.js 16 richiede almeno Chrome/Edge 111, Firefox 111 o Safari 16.4
@@ -170,3 +171,10 @@ Gli smoke test `slow` scaricano la 5M (~21 MB) se non è già in cache.
 - **La baseline stagionale** compare solo se ogni finestra ha almeno due cicli completi di storia.
 - **Dashboard ricaricata da JSON**: per calcolare altre taglie o gruppi serve che il file originale sia ancora in memoria nel backend; altrimenti va ricaricato.
 - **Prestazioni su CPU**: con le taglie 123M e 209M, serie lunghe e molte finestre il calcolo può richiedere minuti.
+- **Testato solo su Windows.** Su macOS e Linux dovrebbe funzionare (il lockfile di uv copre tutte le piattaforme e gli script sono in Node), ma non è stato verificato. Su Linux il pacchetto `torch` di PyPI include le librerie CUDA ed è molto più pesante; su macOS si usa la CPU, perché MPS non è stato verificato.
+
+## Licenza
+
+Il codice di questa repository è distribuito con licenza [MIT](LICENSE).
+
+Timestral è un progetto di Mistral AI, con il suo codice sotto licenza Apache-2.0. I pesi dei modelli non sono inclusi qui: si scaricano da Hugging Face al primo uso e sono soggetti alle condizioni indicate nelle rispettive pagine dei modelli.

@@ -16,32 +16,39 @@ frontend/      dashboard Next.js (TypeScript, Tailwind, Recharts)
 samples/       dataset di esempio e script che genera quelli sintetici
 turbo.json     task del monorepo (Turborepo)
 package.json   workspace npm alla radice
-Makefile       make setup · make dev · make test
+Makefile       scorciatoie make per gli stessi script npm
 ```
 
 Il monorepo è gestito con **Turborepo** su npm workspaces. Il backend resta un progetto Python gestito da uv: il suo `backend/package.json` serve solo a esporre a Turborepo i task `dev`, `test`, `test:fast` e `lint`, che chiamano `uv run …`. Così `turbo run` orchestra entrambe le parti e mette in cache i risultati di test, lint, typecheck e build: se i file non cambiano, il task non viene rieseguito. I test del backend considerano anche `samples/` tra i propri input.
+
+Tutti i comandi si lanciano dalla radice con `npm run <script>`. Il `Makefile` è solo una scorciatoia per chi usa `make`: ogni target chiama lo script npm omonimo (`make dev` → `npm run dev`).
+
+| Script | Cosa fa |
+|---|---|
+| `npm run setup` | `npm install` e `uv sync` nel backend |
+| `npm run dev` | backend e frontend insieme (`turbo run dev`) |
+| `npm run test` | pytest, ruff, tsc, eslint e `next build`, con cache |
+| `npm run test:fast` | solo i test veloci del backend |
+| `npm run lint` | ruff, eslint e tsc |
+| `npm run build` | build di produzione del frontend |
+| `npm run samples` | rigenera i dataset sintetici |
 
 ## Requisiti
 
 - Python ≥ 3.10 e [uv](https://docs.astral.sh/uv/) (`pip install uv`, oppure l'installer ufficiale)
 - Node.js ≥ 20 e npm
 - `uv` raggiungibile nel PATH, perché i task di Turborepo lo invocano direttamente. Se l'hai installato con `pip install --user uv`, su Windows aggiungi `%APPDATA%\Python\Python3XX\Scripts` al PATH.
-- `make`, facoltativo: su Windows si può installare (`winget install GnuWin32.Make`) oppure usare i comandi equivalenti indicati sotto
+- `make`, facoltativo: basta npm; su Windows `make` si installa con `winget install GnuWin32.Make`
 - Un browser recente: Next.js 16 richiede almeno Chrome/Edge 111, Firefox 111 o Safari 16.4
 - GPU NVIDIA facoltativa: senza GPU si usa la CPU
 
 ## Installazione
 
 ```bash
-make setup
+npm run setup        # oppure: make setup
 ```
 
-che equivale a:
-
-```bash
-cd backend && uv sync          # crea backend/.venv dal lockfile
-cd .. && npm install           # workspace npm: frontend e Turborepo, lockfile alla radice
-```
+che esegue `npm install` (workspace npm con frontend e Turborepo, lockfile alla radice) e poi `uv sync` in `backend/`, che crea `backend/.venv` dal lockfile di uv.
 
 Timestral si installa dal repository di Mistral ed è fissato nel lockfile di uv. Per aggiornarlo:
 
@@ -53,10 +60,10 @@ uv add "timestral @ git+https://github.com/mistralai/timestral.git"
 ## Avvio
 
 ```bash
-make dev
+npm run dev          # oppure: make dev
 ```
 
-Avvia insieme il backend su <http://localhost:8000> e il frontend su <http://localhost:3000>; equivale a `npx turbo run dev` (oppure `npm run dev`) dalla radice. Per avviarne uno solo:
+Avvia insieme il backend su <http://localhost:8000> e il frontend su <http://localhost:3000>. Per avviarne uno solo:
 
 ```bash
 npx turbo run dev --filter=backend
@@ -99,7 +106,7 @@ uv run python -c "from timestral import TimestralForecaster as T; [T.from_pretra
 Una volta in cache, le taglie si caricano senza rete: il backend usa automaticamente `local_files_only=True` per i pesi già presenti. Per evitare del tutto chiamate di rete:
 
 ```bash
-TIMESTRAL_OFFLINE=1 make dev        # oppure HF_HUB_OFFLINE=1
+TIMESTRAL_OFFLINE=1 npm run dev     # oppure HF_HUB_OFFLINE=1
 ```
 
 Se una taglia non è in cache, il job si ferma con un messaggio che lo spiega.
@@ -137,11 +144,11 @@ La documentazione interattiva è su <http://localhost:8000/docs>.
 ## Test
 
 ```bash
-make test        # = npx turbo run test lint typecheck build: pytest (con gli smoke test slow), ruff, tsc, eslint, next build
-make test-fast   # = npx turbo run test:fast: solo i test veloci del backend, senza modelli
+npm run test        # pytest (con gli smoke test slow), ruff, tsc, eslint, next build
+npm run test:fast   # solo i test veloci del backend, senza modelli
 ```
 
-Turborepo mette in cache ogni task: un secondo `make test` senza modifiche termina in pochi millisecondi (`FULL TURBO`). Per forzare la riesecuzione usa `npx turbo run test --force`.
+Turborepo mette in cache ogni task: un secondo `npm run test` senza modifiche termina in pochi millisecondi (`FULL TURBO`). Per forzare la riesecuzione usa `npx turbo run test --force`.
 
 Gli smoke test `slow` scaricano la 5M (~21 MB) se non è già in cache.
 
@@ -152,7 +159,7 @@ Gli smoke test `slow` scaricano la 5M (~21 MB) se non è già in cache.
 - `sensore_orario.csv`: 60 giorni orari di due sensori (`sensore_a`, `sensore_b`) in formato lungo, con buchi.
 - `troppo_corto.csv`: 5 righe, per vedere il messaggio d'errore.
 
-`make samples` rigenera i dataset sintetici con seed fisso.
+`npm run samples` rigenera i dataset sintetici con seed fisso.
 
 ## Limiti noti
 

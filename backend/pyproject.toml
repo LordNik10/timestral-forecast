@@ -11,6 +11,7 @@ dependencies = [
     "pandas>=2.3.3",
     "python-multipart>=0.0.32",
     "safetensors>=0.8.0",
+    "timestral",
     "torch>=2.4",
     "uvicorn[standard]>=0.54.0",
 ]
@@ -22,6 +23,9 @@ build-backend = "uv_build"
 [tool.uv.build-backend]
 module-name = "app"
 module-root = ""
+
+[tool.uv.sources]
+timestral = { git = "https://github.com/mistralai/timestral.git", rev = "a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff" }
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

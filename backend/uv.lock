@@ -2103,6 +2103,20 @@ wheels = [
 ]
 
 [[package]]
+name = "timestral"
+version = "1.0.0"
+source = { git = "https://github.com/mistralai/timestral.git?rev=a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff#a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff" }
+dependencies = [
+    { name = "huggingface-hub" },
+    { name = "numpy", version = "2.2.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "numpy", version = "2.4.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version == '3.11.*'" },
+    { name = "numpy", version = "2.5.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
+    { name = "safetensors" },
+    { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "torch", version = "2.15.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+]
+
+[[package]]
 name = "timestral-forecast-backend"
 version = "0.1.0"
 source = { editable = "." }
@@ -2118,6 +2132,7 @@ dependencies = [
     { name = "python-multipart", version = "0.0.32", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "python-multipart", version = "0.0.33", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "safetensors" },
+    { name = "timestral" },
     { name = "torch", version = "2.14.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
     { name = "torch", version = "2.15.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
     { name = "uvicorn", extra = ["standard"] },
@@ -2139,6 +2154,7 @@ requires-dist = [
     { name = "pandas", specifier = ">=2.3.3" },
     { name = "python-multipart", specifier = ">=0.0.32" },
     { name = "safetensors", specifier = ">=0.8.0" },
+    { name = "timestral", git = "https://github.com/mistralai/timestral.git?rev=a534bdbd244d64f3d9d743f46c7bf6fc330ed4ff" },
     { name = "torch", specifier = ">=2.4" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.54.0" },
 ]

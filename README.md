@@ -1,5 +1,9 @@
 # Previsioni locali con Timestral
 
+<p align="center">
+  <img src="docs/come-funziona.webp" alt="Animazione che mostra il funzionamento dell'app: caricamento del dataset, mappatura delle colonne, scelta delle taglie di Timestral, elaborazione, backtest contro le baseline, previsioni con intervallo P10–P90 ed esportazione" width="100%">
+</p>
+
 Applicazione web che gira interamente in locale per prevedere serie temporali con **Timestral** di Mistral AI, una famiglia di foundation model zero-shot (5M, 28M, 123M e 209M parametri).
 
 Carichi un file tabellare, scegli la colonna del tempo e il valore da prevedere, e ottieni:

@@ -20,4 +20,6 @@ Thumbs.db
 
 # Turborepo
 .turbo/
-docs
+# Presentazione: si versiona solo l'animazione usata nel README
+docs/*
+!docs/come-funziona.webp

@@ -170,5 +170,5 @@ def test_summary_sentence():
     ev = evaluate(GOL, plan, q, LEVELS, base, None)
     assert best_baseline(ev) == ("naive", pytest.approx(3.0))
     text = summary_sentence("Timestral-5M", ev, k)
-    assert text.startswith("Con Timestral-5M il modello non batte la baseline migliore (naive (ultimo valore))")
+    assert text.startswith("Con Timestral-5M il modello non batte la baseline migliore (naive)")
     assert "3,00 contro 3,00" in text

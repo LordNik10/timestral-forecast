@@ -19,6 +19,7 @@ MAX_WINDOWS = 50
 DEFAULT_WINDOWS = 10
 
 BASELINE_LABELS = {"naive": "Naive (ultimo valore)", "mean_k": "Media ultime {k}", "seasonal_naive": "Stagionale naive"}
+_SUMMARY_LABELS = {"naive": "naive", "mean_k": "media delle ultime {k}", "seasonal_naive": "naive stagionale"}
 
 
 @dataclass
@@ -211,8 +212,8 @@ def best_baseline(evaluation: Evaluation) -> tuple[str, float]:
     return name, finite[name]
 
 
-def _fmt(x: float) -> str:
-    return f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+def _fmt(x: float, decimals: int = 2) -> str:
+    return f"{x:,.{decimals}f}".replace(",", "X").replace(".", ",").replace("X", ".")
 
 
 def summary_sentence(model_name: str, evaluation: Evaluation, k: int) -> str:
@@ -220,12 +221,12 @@ def summary_sentence(model_name: str, evaluation: Evaluation, k: int) -> str:
     mae = evaluation.model["mae"]
     if not name or not np.isfinite(mae):
         return f"Con {model_name} non è stato possibile confrontare il modello con le baseline."
-    label = baseline_label(name, k).lower()
+    label = _SUMMARY_LABELS[name].format(k=k)
     if base_mae == 0:
         delta = ""
     else:
         pct = abs(mae - base_mae) / base_mae * 100
-        delta = f" ({_fmt(pct)}% {'in meno' if mae < base_mae else 'in più'})"
+        delta = f" ({_fmt(pct, 1)}% {'in meno' if mae < base_mae else 'in più'})"
     verb = "batte" if mae < base_mae else "non batte"
     return (f"Con {model_name} il modello {verb} la baseline migliore ({label}): errore medio "
             f"{_fmt(mae)} contro {_fmt(base_mae)}{delta}.")

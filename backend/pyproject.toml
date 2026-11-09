@@ -1,0 +1,36 @@
+[project]
+name = "timestral-forecast-backend"
+version = "0.1.0"
+description = "Backend FastAPI per il forecasting locale con Timestral"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.162.2",
+    "numpy>=2.2.6",
+    "openpyxl>=3.1.5",
+    "pandas>=2.3.3",
+    "python-multipart>=0.0.32",
+    "torch>=2.4",
+    "uvicorn[standard]>=0.54.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.8,<0.14"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "app"
+module-root = ""
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+markers = ["slow: test end-to-end che caricano Timestral (deselezionabili con -m 'not slow')"]
+
+[tool.ruff]
+line-length = 110
+
+[dependency-groups]
+dev = [
+    "httpx>=0.28.1",
+    "pytest>=9.2.0",
+    "ruff>=0.17.4",
+]

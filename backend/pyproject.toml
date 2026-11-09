@@ -5,10 +5,12 @@ description = "Backend FastAPI per il forecasting locale con Timestral"
 requires-python = ">=3.10"
 dependencies = [
     "fastapi>=0.162.2",
+    "huggingface-hub>=2.4.0",
     "numpy>=2.2.6",
     "openpyxl>=3.1.5",
     "pandas>=2.3.3",
     "python-multipart>=0.0.32",
+    "safetensors>=0.8.0",
     "torch>=2.4",
     "uvicorn[standard]>=0.54.0",
 ]

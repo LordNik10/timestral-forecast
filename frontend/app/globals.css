@@ -1,0 +1,121 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --bg: #f6f5f1;
+  --surface: #ffffff;
+  --surface-2: #f1efe9;
+  --line: #e4e1d8;
+  --ink: #1d1c19;
+  --muted: #6b675e;
+  --accent: #2f5d8a;
+  --accent-ink: #ffffff;
+  --good: #1f7a4d;
+  --good-soft: #e3f2e9;
+  --bad: #b3362b;
+  --bad-soft: #f8e4e1;
+  --warn: #8a5a00;
+  --warn-soft: #fbf0d9;
+  --chart-history: #2b2a27;
+  --chart-model: #2f5d8a;
+  --chart-band: #2f5d8a;
+  --chart-backtest: #c0582b;
+  --chart-zone: #2f5d8a;
+  --chart-grid: #e4e1d8;
+  --chart-selected: #2f5d8a;
+  --chart-other: #b7c4d3;
+  color-scheme: light;
+}
+
+.dark {
+  --bg: #121212;
+  --surface: #1b1b1a;
+  --surface-2: #242422;
+  --line: #34332f;
+  --ink: #ecebe6;
+  --muted: #a19d93;
+  --accent: #7fb0e0;
+  --accent-ink: #0d1a26;
+  --good: #5cc28c;
+  --good-soft: #17301f;
+  --bad: #f07b6e;
+  --bad-soft: #3a1c18;
+  --warn: #e5b45a;
+  --warn-soft: #362a12;
+  --chart-history: #e2e0d9;
+  --chart-model: #7fb0e0;
+  --chart-band: #7fb0e0;
+  --chart-backtest: #f09a6b;
+  --chart-zone: #7fb0e0;
+  --chart-grid: #34332f;
+  --chart-selected: #7fb0e0;
+  --chart-other: #3e5268;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-good: var(--good);
+  --color-good-soft: var(--good-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, Cambria, "Times New Roman", serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+}
+
+.num {
+  font-family: var(--font-serif);
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--surface-2) 25%, var(--line) 37%, var(--surface-2) 63%);
+  background-size: 400% 100%;
+  animation: shimmer 1.4s ease infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}
+
+/* Recharts: tooltip e testi coerenti con il tema */
+.recharts-default-tooltip {
+  background: var(--surface) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: 8px;
+  color: var(--ink);
+}
+.recharts-cartesian-axis-tick-value {
+  fill: var(--muted);
+  font-size: 12px;
+}
+.recharts-brush-texts text {
+  fill: var(--muted);
+}

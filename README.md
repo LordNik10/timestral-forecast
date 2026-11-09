@@ -37,7 +37,7 @@ Tutti i comandi si lanciano dalla radice con `npm run <script>`. Il `Makefile` �
 
 - Python ≥ 3.10 e [uv](https://docs.astral.sh/uv/) (`pip install uv`, oppure l'installer ufficiale)
 - Node.js ≥ 20 e npm
-- `uv` raggiungibile nel PATH, perché i task di Turborepo lo invocano direttamente. Se l'hai installato con `pip install --user uv`, su Windows aggiungi `%APPDATA%\Python\Python3XX\Scripts` al PATH.
+- Gli script npm lanciano uv tramite `scripts/uv.mjs`, che usa `uv` se è nel PATH e altrimenti l'eseguibile installato con `pip install uv`. Il PATH non va quindi modificato; per usare `uv` a mano da terminale, su Windows aggiungi `%APPDATA%\Python\Python3XX\Scripts` al PATH.
 - `make`, facoltativo: basta npm; su Windows `make` si installa con `winget install GnuWin32.Make`
 - Un browser recente: Next.js 16 richiede almeno Chrome/Edge 111, Firefox 111 o Safari 16.4
 - GPU NVIDIA facoltativa: senza GPU si usa la CPU
